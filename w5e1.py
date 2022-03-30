@@ -1,16 +1,18 @@
 "w5e1" 
 import random
 import os
-
-# pokemon s1e1 -> Ash late to professor Oak so can't choose pokemon...
 from datetime import datetime, timedelta
 
-MONDAYS = 1
+MONDAY = 1
 
 
 def pokemon():
-    pokemons = ['Bulbasaur', 'Squirtle', 'Charmander']
-    starter_pokemon = random.choice(pokemons)
+    """ Function  just to try "random" in python.
+    from the tuple POKEMONS chose one random
+    and print the chaise """
+
+    POKEMONS = ('Bulbasaur', 'Squirtle', 'Charmander')
+    starter_pokemon = random.choice(POKEMONS)
     print(starter_pokemon)
 
 
@@ -22,16 +24,17 @@ def pokemon():
 '''
 
 
-def startsWith_files(folder, startsWith):
-    list_files = os.listdir(folder)
-    list_deep_files = []
-    for file in list_files:
-        if file.startswith(startsWith):
-            list_deep_files.append(file)
+def search_files_starts_with_in_folder(folder_path_to_search_in: str, starts_with: str) -> list:
+    """
+    :param folder_path_to_search_in: string. the full path for folder to search in it.
+    :param starts_with: string. what is the start of file to search.
+    :return:list. list of all file how start whit given parameter.(empty if nat enemy)
+    """
+    list_files = os.listdir(folder_path_to_search_in)
+    list_deep_files = [file for file in list_files if file.startswith(starts_with)]
     return list_deep_files
 
 
-# -----------------------------------------------------------------------#
 '''
 I have no vinaigrette
 Write software that receives as input from the user two dates in the configuration: YYYY-MM-DD.
@@ -42,41 +45,55 @@ Since I only go to the grocery store on Mondays and I am a heavy consumer of vin
 '''
 
 
-def IHaveNoVinaigrette():
-    date1 = input("Enter first date: ")
-    while not is_valid_date(date1):
-        date1 = input("Enter first valid date: (YYYY-MM-DD.)")
+def i_Have_no_vinaigrette() -> str:
+    """
+    function get from user 2 date and random chose day between them.
+    calculate if the chosen date is monday.
+    if it's monday return : "I do not have vinaigrette!"
+    else return           : "Here is your sauce, it's 21.90 please"
+    :return:
+    the answer of the shopkeeper depend the day in the week.
+    """
+    first_date = input("Enter first date: ")
+    while not is_valid_date(first_date):
+        first_date = input("Enter first valid date: (YYYY-MM-DD.)")
 
-    date2 = input("Enter second date: ")
-    while not is_valid_date(date2):
-        date2 = input("Enter second valid date: (YYYY-MM-DD.)")
+    second_date = input("Enter second date: ")
+    while not is_valid_date(second_date):
+        second_date = input("Enter second valid date: (YYYY-MM-DD.)")
 
-    date1, date2 = datetime.strptime(min(date1, date2), '%Y-%m-%d'), datetime.strptime(max(date1, date2), '%Y-%m-%d')
-    dayInWeek = get_day_of_week(random_date(date1, date2))
-    if dayInWeek == MONDAYS:
-        print("I do not have vinaigrette!")
-    else:
-        print("Here is your sauce, it's 21.90 please")
+    early_date = datetime.strptime(min(first_date, second_date), '%Y-%m-%d')
+    late_date = datetime.strptime(max(first_date, second_date), '%Y-%m-%d')
+
+    day_in_week = get_day_of_week(random_date(early_date, late_date))
+
+    return "I do not have vinaigrette!" if day_in_week == MONDAY else "Here is your sauce, it's 21.90 please"
 
 
-# function get date yyyy-mm-dd and retern if it is a valid date
 def is_valid_date(date):
+    """
+    function to find if given date is a really a date
+    :param date:date yyyy-mm-dd
+    :return:if it is a valid date
+    """
     try:
         return datetime.strptime(date, '%Y-%m-%d')
     except ValueError:
         return False
 
 
-# function get start date and end date and return random date between them
 def random_date(start, end):
+    """
+    :param start: start date of limit
+    :param end: end date of limit
+    :return: random date between them
+    """
     return start + timedelta(days=random.randint(0, (end - start).days))
 
 
-# function get date and return day of the week
 def get_day_of_week(date):
+    """
+    :param date: date
+    :return: day of the week
+    """
     return date.weekday()
-
-
-# -----------------------------------------------------------------------#
-
-IHaveNoVinaigrette()
