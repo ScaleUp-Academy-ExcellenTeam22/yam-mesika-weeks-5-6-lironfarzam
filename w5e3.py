@@ -1,4 +1,3 @@
-"w5e3"
 #Parseltongue
 """
 The course logo appears in the resources / logo.jpg file, and inside it are hidden some secret messages.
@@ -9,23 +8,24 @@ Find help on the Internet regarding opening files in a binary form and a graded 
 Be careful not to use techniques we have not learned (or add them only in addition to such a solution).
 """
 # open file binary mood
-f = open('logo.jpg', 'rb')
-content = f.read()
-str =""
+file_logo = open('logo.jpg', 'rb')
+content = file_logo.read()
+str = ""
 for i in range(len(content)):
     if content[i] == ord("!"):
         j = i - 1
-        # loop for read all the latter's (a-z only)
-        while(j>0 and content[j] <= ord("z") and content[j] >= ord("a")):
+        # A loop for reading all the letters (a-z only)
+        while j > 0 and ord("z") >= content[j] >= ord("a"):
+
             str += chr(content[j])
             j = j-1
-        # just words longer then 2
+        # Just words longer then 2
         if len(str) > 2:
-            #Reverse printing because we read the letters from end to beginning
+            # Reverse printing because we read the letters from end to beginning
             print(str[::-1])
-        # reset str
-        str =""
+        # Reset str
+        str = ""
 
-f.close()
+file_logo.close()
 
 
