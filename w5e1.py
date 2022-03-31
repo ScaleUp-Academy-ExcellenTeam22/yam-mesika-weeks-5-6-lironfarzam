@@ -97,3 +97,6 @@ def get_day_of_week(date):
     :return: day of the week
     """
     return date.weekday()
+
+if __name__ == __main__:
+    
