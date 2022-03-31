@@ -1,35 +1,38 @@
-# "w5e4"
-
 # connected vessels
-'''
- Write a function called interleave that gets one or more iterable parameters, and returns a list of intertwined members.
-'''
 
-# function to interleave lists
 def interleave(*iterable):
-    longest = max(len(i) for i in iterable)
+    """
+    gets one or more iterable parameters, and returns a list of intertwined members.
+    function to interleave lists
+    :param iterable:
+    :return:
+    """
+    longest = max(len(index) for index in iterable)
     result = []
-    j = 0
-    #Run like this on the loop because it is important that the first members of each list appear first
-    while j < longest:
-        for i in range(len(iterable)):
-            if j < len(iterable[i]):
-                result.append(iterable[i][j])
-        j += 1
+    counter = 0
+    # Run like this on the loop because it is important
+    # that the first members of each list appear first
+    while counter < longest:
+        for index in range(len(iterable)):
+            if counter < len(iterable[index]):
+                result.append(iterable[index][counter])
+        counter += 1
 
     return result
+
 
 # print(interleave('abc', [1, 2, 3], ('!', '@', '#', '$')))
 
 # function to interleave lists
 def interleave_generator(*iterable):
+
     longest = max(len(i) for i in iterable)
     result = []
     j = 0
     while j < longest:
         for i in range(len(iterable)):
             if j < len(iterable[i]):
-                yield (iterable[i][j])
+                yield iterable[i][j]
         j += 1
 
 
@@ -38,7 +41,7 @@ def interleave_generator(*iterable):
 #     print(i)
 
 
-#Harry is rational but not terrible
+# Harry is rational but not terrible
 """
 The librarian who was on his way to bring me the coveted copy of "Harry Potter and the Rational Method" stumbled.
 The books flew by and the book chapters scattered everywhere.
@@ -48,55 +51,63 @@ For example: For the first episode, the file name should be 001 A Day of Very Lo
 During the exercise you may need to combine work with some libraries, including those we have not studied.
 """
 import os
-import re
 import codecs
 from bs4 import BeautifulSoup
 
-#function get num in string ang make it 3 digits long and return it as a string
-def three_digits(num):
-    if len(num) == 3:
-        return num
-    elif len(num) == 2:
-        return '0' + num
-    elif len(num) == 1:
-        return '00' + num
-    else:
-        return '000'
 
-# function get string cut the head and split to num and title
-def getCapterNumAndTitel(str):
+def three_digits(num: str) -> str:
+    """
+    function get num in string ang make it 3 digits long and return it as a string
+    :param num: num in string
+    :return: 3 digits long
+    """
+    while len(num) != 3:
+        num = '0' + num
+
+    return num
+
+
+def get_chapter_num_and_title(str):
+    """
+    function get string cut the head and split to num and title
+    :param str: string
+    :return: num of chapter and title
+    """
     head = "Chapter"
     temp = str[len(head):]
-    ret1 =""
+    ret1 = ""
     ret2 = ""
     i = 0
 
-    #Capter num
+    # Chapter num
     while temp[i] != ":":
         ret1 += temp[i]
-        i = i+1
+        i = i + 1
 
-    i = i+1
-    #Capter title
+    i = i + 1
+    # Chapter title
     while i < len(temp) and temp[i] != "<":
         if temp[i] != "\n" and temp[i] != ":":
             ret2 += temp[i]
-        i = i+1
+        i = i + 1
 
-    return three_digits(ret1.replace(" ", "")),ret2
+    return three_digits(ret1.replace(" ", "")), ret2
 
 
 def rename(path):
-
-    str=""
-    for filename in os.listdir(path):
-        file = codecs.open(path + "/" + filename, "r", encoding="utf8")
-        html = file.read()
+    str = ""
+    for file_name in os.listdir(path):
+        file_to_change_name = codecs.open(path + "/" + file_name, "r", encoding="utf8")
+        html = file_to_change_name.read()
         soup = BeautifulSoup(html, 'html.parser')
         div = soup.find(id="chapter-title")
-        chapterNum, chapterTitel = getCapterNumAndTitel(div.get_text())
-        file.close()
-        new_name = chapterNum + chapterTitel
-        os.rename(os.path.join(path + "/", filename), os.path.join(path + "/", new_name + '.html'))
+        chapterNum, chapter_title = get_chapter_num_and_title(div.get_text())
+        file_to_change_name.close()
+        new_name = chapterNum + chapter_title
+        os.rename(os.path.join(path + "/", file_name), os.path.join(path + "/", new_name + '.html'))
 
-rename("Harry")
+
+if __name__ == "__main__":
+    print(three_digits("1"))
+    print(three_digits("12"))
+    print(three_digits("123"))
